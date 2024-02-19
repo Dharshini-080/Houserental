@@ -2,9 +2,11 @@ package Views;
 import java.sql.SQLException;
 import java.util.List;
 
+import Controllers.TenantControl;
 import Controllers.UserControl;
 
 import Resources.propertiesDTO;
+import Resources.usersDTO;
 import util.Input;
 
 
@@ -18,6 +20,7 @@ public class landlordView extends Input
        System.out.println("3.Show properties based on property_id");
        System.out.println("4.Show all Properties");
        System.out.println("5.Update property");
+       System.out.println("6.Show all the details of tenants who have booked the house");
        int choice=sc.nextInt();
        sc.nextLine();
        if(choice==1)
@@ -40,6 +43,10 @@ public class landlordView extends Input
        {
             update();
        }
+       else if(choice==6)
+       {
+        viewAllBookedTenants();
+       }
        else
         {
             System.out.println("Invalid choice");
@@ -47,6 +54,7 @@ public class landlordView extends Input
         }
 
     }
+    
     public void getProp() throws Exception
     {
         System.out.println("Enter the type of house");
@@ -209,6 +217,22 @@ public class landlordView extends Input
                 
             }
         }
+    }
+    public void viewAllBookedTenants() throws SQLException 
+    {
+        TenantControl tenantControl = new TenantControl();
+    List<usersDTO> bookedTenants = tenantControl.getAllBookedTenants();
+    if (!bookedTenants.isEmpty()) {
+        System.out.println("Booked Tenants:");
+        for (usersDTO tenant : bookedTenants) {
+            System.out.println("Tenant ID: " + tenant.getUser_id());
+            System.out.println("Tenant Name: "+tenant.getUser_Name());
+            System.out.println("Tenant Phone number: "+tenant.getPhone_no());
+            System.out.println("Tenant Address: "+tenant.getAddress());
+        }
+    } else {
+        System.out.println("No tenants are currently booked.");
+    }
     }
     
 }

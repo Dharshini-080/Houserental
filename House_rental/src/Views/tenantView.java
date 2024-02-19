@@ -1,4 +1,5 @@
 package Views;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -57,8 +58,20 @@ public class tenantView extends Input
     {
         System.out.println("Enter property ID to book");
         int propertyId=sc.nextInt();
+
+        System.out.println("Enter start date (YYYY-MM-DD): ");
+        String startDateStr = sc.next();
+        Date startDate = Date.valueOf(startDateStr);
+    
+       System.out.println("Enter end date (YYYY-MM-DD): ");
+       String endDateStr = sc.next();
+       Date endDate = Date.valueOf(endDateStr);
+
+       System.out.println("Enter number of family members: ");
+        int members = sc.nextInt();
+
         TenantControl tenantControl = new TenantControl(); 
-        int result = tenantControl.bookProperty(propertyId);   
+        int result = tenantControl.bookProperty(propertyId,startDate,endDate,members);   
         if (result == 1) 
         {
             System.out.println("Property booked successfully");

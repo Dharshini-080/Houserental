@@ -1,5 +1,6 @@
 package Models;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,24 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Resources.propertiesDTO;
+import Resources.rentalagreementsDTO;
+import Resources.usersDTO;
 import util.Cookie;
 
-public class tenantDAO extends Connect
+public class rentalgreementsDAO extends Connect
 {
 
-    private static tenantDAO instance;
-    PreparedStatement view,getProperty,updatePropertyStatus,insertTenant;
-    private tenantDAO() throws SQLException 
+    private static rentalgreementsDAO instance;
+    PreparedStatement view,getProperty,updatePropertyStatus,insertRentalAgreement,bookedtenants;
+    private rentalgreementsDAO() throws SQLException 
     {
         view=con.prepareStatement("select*from properties");
         getProperty = con.prepareStatement("select * from properties where Property_id = ?");
         updatePropertyStatus = con.prepareStatement("update properties set Status = ? where Property_id = ?");
-        insertTenant = con.prepareStatement("insert into tenant (Tenant_id, Property_id) values (?, ?)");
+        insertRentalAgreement = con.prepareStatement("insert into rentalagreements (Start_date, End_date, Tenant_id, Property_id, Members) values (?, ?, ?, ?, ?)");
+        bookedtenants=con.prepareStatement("SELECT * FROM users INNER JOIN rentalagreements ON users.user_id = rentalagreements.Tenant_id");
+        
     }
-    public static tenantDAO getInstance() throws SQLException 
+    public static rentalgreementsDAO getInstance() throws SQLException 
     {
         if (instance == null) {
-            instance = new tenantDAO();
+            instance = new rentalgreementsDAO();
         }
         return instance;
     }
@@ -69,14 +74,34 @@ public class tenantDAO extends Connect
         updatePropertyStatus.setInt(2, propertyId);
         return updatePropertyStatus.executeUpdate();
     }
-    
-    public int insertTenant(int propertyId) throws SQLException 
-    {
+    public int insertRentalAgreement(int propertyId, Date startDate, Date endDate, int members) throws SQLException {
+        
         int Landlord_id=Cookie.userId;
-        insertTenant.setInt(1, Landlord_id); 
-        insertTenant.setInt(2, propertyId);
-        return insertTenant.executeUpdate();
+        insertRentalAgreement.setDate(1, startDate);
+        insertRentalAgreement.setDate(2, endDate);
+        insertRentalAgreement.setInt(3, Landlord_id); 
+        insertRentalAgreement.setInt(4, propertyId);
+        insertRentalAgreement.setInt(5, members);
+        return insertRentalAgreement.executeUpdate();
     }
+    public List<usersDTO> getAllBookedTenants() throws SQLException 
+    {
+        List<usersDTO> bookedTenants = new ArrayList<>();
+        ResultSet rs = bookedtenants.executeQuery();
+        while (rs.next()) 
+        {
+            usersDTO tenant = new usersDTO();
+            rentalagreementsDTO t=new rentalagreementsDTO();
+            tenant.setUser_id(rs.getInt("User_id"));
+            tenant.setUser_Name(rs.getString("User_name"));
+            tenant.setPhone_no(rs.getString("Phone_no"));
+            tenant.setAddress(rs.getString("Address"));
+            bookedTenants.add(tenant);
+        }
+        return bookedTenants;
+
+    }
+
 }
 
     
