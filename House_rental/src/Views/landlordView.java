@@ -40,11 +40,13 @@ public class landlordView extends Input
        {
             update();
        }
+       else
+        {
+            System.out.println("Invalid choice");
+            return;
+        }
 
     }
-    
-   
-
     public void getProp() throws Exception
     {
         System.out.println("Enter the type of house");

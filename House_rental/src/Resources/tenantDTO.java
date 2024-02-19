@@ -5,6 +5,10 @@ public class tenantDTO
     private int Tenant_id;
     private int Property_id;
 
+    public tenantDTO(){
+        
+    }
+
     public tenantDTO(int Tenant_id, int Property_id) {
         this.Tenant_id = Tenant_id;
         this.Property_id = Property_id;

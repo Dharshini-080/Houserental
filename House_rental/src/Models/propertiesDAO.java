@@ -93,6 +93,7 @@ public class propertiesDAO extends Connect
         propertiesList.add(property); 
      }
     return propertiesList;
+   
     }
 
 
