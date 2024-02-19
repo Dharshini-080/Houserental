@@ -47,6 +47,8 @@ public class UserView extends Input
         }
         else{
             System.out.println("Tenant");
+            tenantView U=new tenantView();
+            U.buyProperty();
         }
     }
     public void toSignUp() throws Exception
@@ -68,6 +70,7 @@ public class UserView extends Input
                 if(check==1)
                 {
                     System.out.println("Signup Successfull");
+                    tosignUpLogin();
                 }
                 else{
                     System.out.println("Signup failed");

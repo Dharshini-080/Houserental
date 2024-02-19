@@ -6,12 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import Resources.propertiesDTO;
 
 public class propertiesDAO extends Connect
 {
     private static propertiesDAO instance;
-    PreparedStatement addProperty,dp,sp,sa;
+    PreparedStatement addProperty,dp,sp,sa,up,upw,upr;
 
     private propertiesDAO() throws SQLException 
     {
@@ -19,6 +20,10 @@ public class propertiesDAO extends Connect
         dp=con.prepareStatement("Delete from Properties where Property_id=?");
         sp=con.prepareStatement("select*from properties where Property_id=?");
         sa=con.prepareStatement("Select*from properties");
+        up=con.prepareStatement("UPDATE Properties SET TypeOfHouse = ? WHERE Property_id = ?");
+        upw=con.prepareStatement("UPDATE Properties SET Waterfacility = ? WHERE Property_id = ?");
+        upr=con.prepareStatement("UPDATE Properties SET Rent = ? WHERE Property_id = ?");
+
     }
 
 
@@ -91,6 +96,30 @@ public class propertiesDAO extends Connect
     }
 
 
-    
+    public boolean updatePropertyType(int p, String n) throws SQLException 
+    {
+        up.setString(1,n);
+        up.setInt(2,p);
+        up.executeUpdate();
+        return true;
+    }
+
+
+    public boolean updatePropertyWaterFacility(int p, String newWaterFacility) throws SQLException 
+    {
+        upw.setString(1,newWaterFacility);
+        upw.setInt(2,p);
+        upw.executeUpdate();
+        return true;
+    }
+
+
+    public boolean updatePropertyRent(int p, int newRent) throws SQLException
+    {
+        upr.setInt(1,newRent);
+        upr.setInt(2,p);
+        upr.executeUpdate();
+        return true;
+    } 
     
 }

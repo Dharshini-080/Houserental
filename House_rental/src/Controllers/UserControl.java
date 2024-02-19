@@ -95,4 +95,19 @@ public class UserControl
         List<propertiesDTO> properties = add.getAllProperty();
         return properties;
     }
+    public boolean updatePropertyType(int p, String n) throws SQLException 
+    {
+        propertiesDAO add = propertiesDAO.getInstance();
+        return add.updatePropertyType(p, n);
+    }
+    public boolean updatePropertyWaterFacility(int p, String newWaterFacility) throws SQLException 
+    {
+        propertiesDAO add = propertiesDAO.getInstance();
+        return add.updatePropertyWaterFacility(p, newWaterFacility);
+    }
+    public boolean updatePropertyRent(int p, int newRent) throws SQLException 
+    {
+        propertiesDAO add = propertiesDAO.getInstance();
+        return add.updatePropertyRent(p, newRent);
+    }
 }
