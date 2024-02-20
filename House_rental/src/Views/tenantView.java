@@ -12,9 +12,13 @@ public class tenantView extends Input
 
     public void buyProperty() throws SQLException 
     {
+        boolean m=true;
+        while(m)
+        {
         System.out.println("1.View all Property");
         System.out.println("2.Book a Property");
         System.out.println("3.Make Payment");
+        System.out.println("4.Logout");
         int choice=sc.nextInt();
         if(choice==1)
         {
@@ -28,11 +32,16 @@ public class tenantView extends Input
         {
             makePayment();
         }
+        else if(choice==4)
+        {
+            System.out.println("Thank you");
+            m=false;
+        }
         else
         {
             System.out.println("Invalid choice");
-            return;
         }
+    }
     }
 
     

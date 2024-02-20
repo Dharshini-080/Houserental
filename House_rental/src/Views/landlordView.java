@@ -15,43 +15,53 @@ public class landlordView extends Input
 
     public void addProperty() throws Exception 
     {
+       boolean y=true;
+       while(y)
+       {
        System.out.println("1.Add a new Property");
        System.out.println("2.Delete a Property");
        System.out.println("3.Show properties based on property_id");
        System.out.println("4.Show all Properties");
        System.out.println("5.Update property");
        System.out.println("6.Show all the details of tenants who have booked the house");
+       System.out.println("7.Logout");
        int choice=sc.nextInt();
        sc.nextLine();
        if(choice==1)
        {
           getProp();
        }
-       else if(choice==2)
+        else if(choice==2)
        {
             delProp();
        }
-       else if(choice==3)
+        else if(choice==3)
        {
             showProp();
        }
-       else if(choice==4)
+        else if(choice==4)
        {
             showAll();
        }
-       else if(choice==5)
+        else if(choice==5)
        {
             update();
        }
-       else if(choice==6)
+        else if(choice==6)
        {
         viewAllBookedTenants();
        }
+       else if(choice==7)
+       {
+        System.out.println("Thank You");
+        y=false;
+       }
        else
-        {
-            System.out.println("Invalid choice");
-            return;
-        }
+       {
+        System.out.println("Invalid choice");
+       }
+       
+    }
 
     }
     

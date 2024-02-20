@@ -7,26 +7,32 @@ public class UserView extends Input
 {
     public void tosignUpLogin() throws Exception
     {
+        boolean f=true;
+        while(f)
+        {
         System.out.println("Welcome to House Rental Management System");
         System.out.println("1. Login");
         System.out.println("2. Sign Up");
         System.out.println("3. Exit");
         System.out.print("Enter your choice: ");
         int choice = sc.nextInt();
+        
         sc.nextLine(); 
-        if(choice==1)
+        switch(choice)
         {
+            case 1:
             getLogin();
-        }
-        else if(choice==2)
-        {
+            break;
+    
+            case 2:
             toSignUp();
-        }
-        else
-        {
+            break;
+    
+            case 3:
             System.out.println("Thank you for visiting");
-            return;
-        }
+            break;
+      }
+    }
 
     }
     public void getLogin() throws Exception
@@ -61,12 +67,11 @@ public class UserView extends Input
                 String password = sc.nextLine();
                 System.out.print("Enter phone number: ");
                 String phone = sc.nextLine();
-                System.out.print("Enter role (tenant): ");
-                String role = sc.nextLine();
+                
                 System.out.print("Enter address: ");
                 String address = sc.nextLine();
                 UserControl us=new UserControl();
-                int check=us.signUp(name,email,password,phone,role,address);
+                int check=us.signUp(name,email,password,phone,"tenant",address);
                 if(check==1)
                 {
                     System.out.println("Signup Successfull");
