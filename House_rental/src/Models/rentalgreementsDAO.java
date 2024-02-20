@@ -16,15 +16,18 @@ public class rentalgreementsDAO extends Connect
 {
 
     private static rentalgreementsDAO instance;
-    PreparedStatement view,getProperty,updatePropertyStatus,insertRentalAgreement,bookedtenants,bt;
+    PreparedStatement view,getProperty,updatePropertyStatus,insertRentalAgreement,bookedtenants,bt,date,dt;
     private rentalgreementsDAO() throws SQLException 
     {
         view=con.prepareStatement("select*from properties");
         getProperty = con.prepareStatement("select * from properties where Property_id = ?");
         updatePropertyStatus = con.prepareStatement("update properties set Status = ? where Property_id = ?");
         insertRentalAgreement = con.prepareStatement("insert into rentalagreements (Start_date, End_date, Tenant_id, Property_id, Members) values (?, ?, ?, ?, ?)");
-        bookedtenants=con.prepareStatement("SELECT * FROM users INNER JOIN rentalagreements ON users.user_id = rentalagreements.Tenant_id");
+        bookedtenants=con.prepareStatement("SELECT * FROM users u JOIN rentalagreements r ON u.User_id = r.Tenant_id");
         bt=con.prepareStatement("SELECT * FROM rentalagreements WHERE Tenant_id = ? AND Property_id = ?");
+        date=con.prepareStatement("SELECT * FROM RentalAgreements WHERE Property_id = ?");
+        dt=con.prepareStatement("SELECT*FROM RentalAgreements");
+
         
     }
     public static rentalgreementsDAO getInstance() throws SQLException 
@@ -109,6 +112,43 @@ public class rentalgreementsDAO extends Connect
         ResultSet resultSet = bt.executeQuery();
         return resultSet.next();
     }
+    public List<rentalagreementsDTO> getBookingsForProperty(int propertyId) throws SQLException 
+    {
+        date.setInt(1, propertyId);
+    ResultSet resultSet = date.executeQuery();
+
+    List<rentalagreementsDTO> bookings = new ArrayList<>();
+    while (resultSet.next()) 
+    {
+        rentalagreementsDTO booking = new rentalagreementsDTO();
+        booking.setRental_id(resultSet.getInt("Rental_id"));
+        booking.setStart_date(resultSet.getDate("Start_date"));
+        booking.setEnd_Date(resultSet.getDate("End_date"));
+        booking.setTenant_id(resultSet.getInt("Tenant_id"));
+        booking.setMembers(resultSet.getInt("Members"));
+        bookings.add(booking);
+    }
+    return bookings;
+    }
+    public List<rentalagreementsDTO> getAllRentalAgreements() throws SQLException 
+    {
+        
+    List<rentalagreementsDTO> bookings = new ArrayList<>();
+    ResultSet resultSet = dt.executeQuery();
+    while (resultSet.next()) 
+    {
+        rentalagreementsDTO booking = new rentalagreementsDTO();
+        booking.setProperty_id(resultSet.getInt("Property_id"));
+        booking.setRental_id(resultSet.getInt("Rental_id"));
+        booking.setStart_date(resultSet.getDate("Start_date"));
+        booking.setEnd_Date(resultSet.getDate("End_date"));
+        booking.setTenant_id(resultSet.getInt("Tenant_id"));
+        booking.setMembers(resultSet.getInt("Members"));
+        bookings.add(booking);
+    }
+    return bookings;
+    }
+    
 
 }
 

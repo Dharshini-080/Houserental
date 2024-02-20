@@ -6,6 +6,7 @@ import Controllers.TenantControl;
 import Controllers.UserControl;
 
 import Resources.propertiesDTO;
+import Resources.rentalagreementsDTO;
 import Resources.usersDTO;
 import util.Input;
 
@@ -18,13 +19,18 @@ public class landlordView extends Input
        boolean y=true;
        while(y)
        {
-       System.out.println("1.Add a new Property");
-       System.out.println("2.Delete a Property");
-       System.out.println("3.Show properties based on property_id");
-       System.out.println("4.Show all Properties");
-       System.out.println("5.Update property");
-       System.out.println("6.Show all the details of tenants who have booked the house");
-       System.out.println("7.Logout");
+       System.out.println("***************************************************************************************");
+       System.out.println("*                    1.Add a new Property                                             *");
+       System.out.println("*                    2.Delete a Property                                              *");
+       System.out.println("*                    3.Show properties based on property_id                           *");
+       System.out.println("*                    4.Show all Properties                                            *");
+       System.out.println("*                    5.Update property                                                *");
+       System.out.println("*                    6.Show all the details of tenants who have booked the house      *");
+       System.out.println("*                    7.Show all the rentalagreements                                  *");
+       System.out.println("*                    8.Logout                                                         *");
+       System.out.println("***************************************************************************************");
+       
+
        int choice=sc.nextInt();
        sc.nextLine();
        if(choice==1)
@@ -53,7 +59,11 @@ public class landlordView extends Input
        }
        else if(choice==7)
        {
-        System.out.println("Thank You");
+         viewAllRentalagreements();
+       }
+       else if(choice==8)
+       {
+        System.out.println("Thank You for visiting");
         y=false;
        }
        else
@@ -65,6 +75,8 @@ public class landlordView extends Input
 
     }
     
+   
+
     public void getProp() throws Exception
     {
         System.out.println("Enter the type of house");
@@ -133,7 +145,7 @@ public class landlordView extends Input
         List<propertiesDTO> properties = us.getAllProperty();
         if(!properties.isEmpty())
         {
-            System.out.println("Displayed the details of entered property ID:");
+            System.out.println("Displayed the details of all property:");
             System.out.println("-----------------------------------------------");
             for(propertiesDTO property:properties)
             {
@@ -231,17 +243,37 @@ public class landlordView extends Input
     public void viewAllBookedTenants() throws SQLException 
     {
         TenantControl tenantControl = new TenantControl();
-    List<usersDTO> bookedTenants = tenantControl.getAllBookedTenants();
-    if (!bookedTenants.isEmpty()) {
+       List<usersDTO> bookedTenants = tenantControl.getAllBookedTenants();
+       if (!bookedTenants.isEmpty()) {
         System.out.println("Booked Tenants:");
         for (usersDTO tenant : bookedTenants) {
             System.out.println("Tenant ID: " + tenant.getUser_id());
             System.out.println("Tenant Name: "+tenant.getUser_Name());
             System.out.println("Tenant Phone number: "+tenant.getPhone_no());
             System.out.println("Tenant Address: "+tenant.getAddress());
+            System.out.println("----------------------------------------");
         }
     } else {
         System.out.println("No tenants are currently booked.");
+    }
+    }
+    private void viewAllRentalagreements() throws SQLException 
+    {
+        TenantControl tenantControl = new TenantControl();
+        List<rentalagreementsDTO> t=tenantControl.getAllRentalAgreements();
+        if (!t.isEmpty()) {
+        System.out.println("Booked Tenants:");
+        for (rentalagreementsDTO tenant : t) {
+            System.out.println("Property_ID: "+tenant.getProperty_id());
+            System.out.println("Rental ID: " + tenant.getRental_id());
+            System.out.println("Start_date: "+tenant.getStart_date());
+            System.out.println("End_date: "+tenant.getEnd_Date());
+            System.out.println("Tenant_id: "+tenant.getTenant_id());
+            System.out.println("----------------------------------------");
+        }
+    } 
+    else {
+        System.out.println("No rental agreements done yet");
     }
     }
     

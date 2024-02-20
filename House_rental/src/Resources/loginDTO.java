@@ -16,11 +16,13 @@ public class loginDTO
         this.Password = Password;
         this.Role = Role;
     }
-    public int getUser_id() {
+    public int getUser_id() 
+        {
         return this.User_id;
     }
 
-    public void setUser_id(int User_id) {
+    public void setUser_id(int User_id) 
+    {
         this.User_id = User_id;
     }
 

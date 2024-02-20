@@ -7,6 +7,7 @@ import java.util.List;
 import Models.paymentsDAO;
 import Models.rentalgreementsDAO; 
 import Resources.propertiesDTO;
+import Resources.rentalagreementsDTO;
 import Resources.usersDTO;
 
 public class TenantControl 
@@ -23,16 +24,12 @@ public class TenantControl
     {
         rentalgreementsDAO dao = rentalgreementsDAO.getInstance();
         propertiesDTO property = dao.getProperty(propertyId);
-        if(property==null)
+        TenantControl u=new TenantControl();
+        boolean c1=u.bookcheckProperty1(propertyId);
+        boolean c2=u.bookcheckProperty2(propertyId, startDate, endDate);
+        if(c1 || c2)
         {
-            return 0;
-        }
-        if(property.getStatus()!=1)
-        {
-            return -1;
-        }
-
-        int updateStatusResult = dao.updatePropertyStatus(propertyId,0);
+            int updateStatusResult = dao.updatePropertyStatus(propertyId,0);
         if(updateStatusResult!=1)
         {
             return -2;
@@ -43,7 +40,40 @@ public class TenantControl
             return -3;
         }
         return 1;
+        }
+        return 9;
+        
 
+    }
+    public boolean bookcheckProperty1(int propertyId) throws SQLException
+    {
+        rentalgreementsDAO dao = rentalgreementsDAO.getInstance();
+        propertiesDTO property = dao.getProperty(propertyId);
+        if(property==null)
+        {
+            return false;
+        }
+        if(property.getStatus()!=1)
+        {
+
+            return true;
+        }
+        return false;
+    }
+    public boolean bookcheckProperty2(int propertyId,Date startDate, Date endDate) throws SQLException{
+        rentalgreementsDAO dao = rentalgreementsDAO.getInstance();
+        List<rentalagreementsDTO> existingBookings = dao.getBookingsForProperty(propertyId);
+      for(rentalagreementsDTO booking : existingBookings) {
+        Date bookedStartDate = (Date) booking.getStart_date();
+        Date bookedEndDate = (Date) booking.getEnd_Date();
+        
+        if(startDate.before(bookedEndDate) && endDate.after(bookedStartDate)) 
+        {
+            return false; 
+        }
+
+       }
+       return true;
     }
     public List<usersDTO> getAllBookedTenants() throws SQLException 
     {
@@ -60,6 +90,12 @@ public class TenantControl
         }
         paymentsDAO paymentsDao = paymentsDAO.getInstance();
         return paymentsDao.insertPayment(landlordId, propertyId, date);
+    }
+
+    public List<rentalagreementsDTO> getAllRentalAgreements() throws SQLException
+     {
+        rentalgreementsDAO dao = rentalgreementsDAO.getInstance();
+         return dao.getAllRentalAgreements();
     }
 
 }
