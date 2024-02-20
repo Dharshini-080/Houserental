@@ -6,6 +6,10 @@ public class paymentsDTO
     private int Landlord_id;
     private int Property_id;
     private Date Date;
+
+    public paymentsDTO(){
+        
+    }
     
         public paymentsDTO(int Payment_id, int Landlord_id, int Property_id, Date Date) {
             this.Payment_id = Payment_id;

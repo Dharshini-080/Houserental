@@ -3,6 +3,8 @@ package Controllers;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+
+import Models.paymentsDAO;
 import Models.rentalgreementsDAO; 
 import Resources.propertiesDTO;
 import Resources.usersDTO;
@@ -48,4 +50,16 @@ public class TenantControl
     rentalgreementsDAO dao = rentalgreementsDAO.getInstance();
     return dao.getAllBookedTenants();
      }
+
+     public boolean makePayment(int tenantId, int landlordId,int propertyId ,Date date) throws SQLException {
+        rentalgreementsDAO dao = rentalgreementsDAO.getInstance();
+        boolean isBooked = dao.isPropertyBookedByTenant(tenantId, propertyId);
+        if (!isBooked) 
+        {
+            return false; 
+        }
+        paymentsDAO paymentsDao = paymentsDAO.getInstance();
+        return paymentsDao.insertPayment(landlordId, propertyId, date);
+    }
+
 }

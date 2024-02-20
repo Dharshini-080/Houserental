@@ -16,7 +16,7 @@ public class rentalgreementsDAO extends Connect
 {
 
     private static rentalgreementsDAO instance;
-    PreparedStatement view,getProperty,updatePropertyStatus,insertRentalAgreement,bookedtenants;
+    PreparedStatement view,getProperty,updatePropertyStatus,insertRentalAgreement,bookedtenants,bt;
     private rentalgreementsDAO() throws SQLException 
     {
         view=con.prepareStatement("select*from properties");
@@ -24,6 +24,7 @@ public class rentalgreementsDAO extends Connect
         updatePropertyStatus = con.prepareStatement("update properties set Status = ? where Property_id = ?");
         insertRentalAgreement = con.prepareStatement("insert into rentalagreements (Start_date, End_date, Tenant_id, Property_id, Members) values (?, ?, ?, ?, ?)");
         bookedtenants=con.prepareStatement("SELECT * FROM users INNER JOIN rentalagreements ON users.user_id = rentalagreements.Tenant_id");
+        bt=con.prepareStatement("SELECT * FROM rentalagreements WHERE Tenant_id = ? AND Property_id = ?");
         
     }
     public static rentalgreementsDAO getInstance() throws SQLException 
@@ -100,6 +101,13 @@ public class rentalgreementsDAO extends Connect
         }
         return bookedTenants;
 
+    }
+    public boolean isPropertyBookedByTenant(int tenantId, int propertyId) throws SQLException 
+    {
+        bt.setInt(1, tenantId);
+        bt.setInt(2, propertyId);
+        ResultSet resultSet = bt.executeQuery();
+        return resultSet.next();
     }
 
 }

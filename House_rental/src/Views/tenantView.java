@@ -5,6 +5,7 @@ import java.util.List;
 
 import Controllers.TenantControl;
 import Resources.propertiesDTO;
+import util.Cookie;
 import util.Input;
 public class tenantView extends Input
 {
@@ -13,6 +14,7 @@ public class tenantView extends Input
     {
         System.out.println("1.View all Property");
         System.out.println("2.Book a Property");
+        System.out.println("3.Make Payment");
         int choice=sc.nextInt();
         if(choice==1)
         {
@@ -22,12 +24,18 @@ public class tenantView extends Input
         {
             bookProperty();
         }
+        else if(choice==3)
+        {
+            makePayment();
+        }
         else
         {
             System.out.println("Invalid choice");
             return;
         }
     }
+
+    
 
     private void viewAllProperties() throws SQLException 
     {
@@ -87,10 +95,29 @@ public class tenantView extends Input
         {
             System.out.println("Failed to book property");
         }
-
-
+    
     }
+    private void makePayment() throws SQLException 
+    {
+        System.out.println("Enter landlord ID: ");
+        int landlordId = sc.nextInt();
 
+        System.out.println("Enter property ID: ");
+        int propertyId = sc.nextInt();
+
+        System.out.println("Enter payment date (YYYY-MM-DD): ");
+        String dateStr = sc.next();
+        Date date = Date.valueOf(dateStr);
+        int tenantId=Cookie.userId;
+
+        TenantControl tenantControl = new TenantControl();
+        boolean success = tenantControl.makePayment(tenantId,landlordId, propertyId, date);
+        if (success) {
+            System.out.println("Payment made successfully");
+        } else {
+            System.out.println("Failed to make payment.Please book the property and make the payemnt");
+        }
+    }
     
     
 }
